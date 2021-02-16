@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+
+  app:
+    build: .
+    container_name: scaffold_app_container
+    hostname: app
+    restart: unless-stopped
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      - 8000:80
+      - 3306:3306
+
+networks:
+  default:
