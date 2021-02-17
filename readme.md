@@ -32,9 +32,11 @@ Depending on your OS, the appropriate version of Docker Community Edition has to
 
 2. Open a new terminal/CMD, navigate to this repository root (where `docker-compose.yml` exists).
 
-3. Update the values of services.app.container_name and services.app.ports as required. **N.B:** Remember to branch off master before making edits to the source code.
+3. Update the remote upstream to point to your repo using: `git remote set-url origin <repo_url>`.
 
-4. Execute the following command:
+4. Update the values of services.app.container_name and services.app.ports as required. **N.B:** Remember to branch off master before making edits to the source code.
+
+5. Execute the following command:
 
     ```
     $ docker-compose up -d
@@ -42,25 +44,25 @@ Depending on your OS, the appropriate version of Docker Community Edition has to
 
     This will download/build all the required images and start the stack containers. It usually takes a bit of time, so grab a cup of coffee.
 
-5. After the whole stack is up, ssh into the app container by running the following command:
+6. After the whole stack is up, ssh into the app container by running the following command:
 
     ```
     $ docker exec -it [app_container_name] bash
     ```
     Replace `app_container_name` with the name of your app container. If successful, the command would open up an interactive shell in the /var/www/html folder.
 
-6. In that shell, run `$ composer update` to install all your Lumen dependencies.
+7. In that shell, run `$ composer update` to install all your Lumen dependencies.
 
-7. Copy .env.example to .env:
+8. Copy .env.example to .env:
 
     ```
     $ cp .env.example .env
     ```
 
-8. In the `.env` file, you need to assign a value to **APP_KEY**. Laravel allows you to easily generate an app key with `php artisan key:generate` command but Lumen being extremely light weight doesn't come with a lot of artisan commands, so you're going to have to [do this manually](http://www.unit-conversion.info/texttools/random-string-generator/).
+9. In the `.env` file, you need to assign a value to **APP_KEY**. Laravel allows you to easily generate an app key with `php artisan key:generate` command but Lumen being extremely light weight doesn't come with a lot of artisan commands, so you're going to have to [do this manually](http://www.unit-conversion.info/texttools/random-string-generator/).
 
-9. Ensure that you have a MySQL server instance running on your local machine. Enter the MySQL connection values into your `.env` file. The host should be set to host.docker.internal.
+10. Ensure that you have a MySQL server instance running on your local machine. Enter the MySQL connection values into your `.env` file. The host should be set to host.docker.internal.
 
-10. In your terminal, run `php artisan migrate --seed` to migrate existing tables to your database.
+11. In your terminal, run `php artisan migrate --seed` to migrate existing tables to your database.
 
-11. That's it! Connect to [http://localhost:your_app_port](http://localhost:your_app_port) on your browser or via Postman. The endpoint should return a 'Welcome to CashEnvoy!' message as part of a JSON response object.
+12. That's it! Connect to [http://localhost:your_app_port](http://localhost:your_app_port) on your browser or via Postman. The endpoint should return a 'Welcome to CashEnvoy!' message as part of a JSON response object.
