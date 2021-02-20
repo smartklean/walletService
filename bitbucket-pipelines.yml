@@ -1,5 +1,4 @@
-# This is an example Starter pipeline configuration
-# Use a skeleton to build, test and deploy using manual and parallel steps
+# Do not edit
 # -----
 # You can specify a custom docker image from Docker Hub as your build environment.
 image: php:7.4.15
