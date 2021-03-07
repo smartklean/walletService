@@ -1,11 +1,15 @@
 # Do not edit
 # -----
 # You can specify a custom docker image from Docker Hub as your build environment.
-image: php:7.4.15
+
+image: cashenvoyng/deploykit-php-aws:latest
 clone:
   depth: full # SonarCloud scanner needs the full history to assign issues properly
 
 definitions:
+  services:
+    docker:
+      memory: 2048
   caches:
     sonar: ~/.sonar/cache  # Caching SonarCloud artifacts will speed up your build
   steps:
@@ -25,18 +29,14 @@ definitions:
         name: Check the Quality Gate on SonarCloud
         script:
           - pipe: sonarsource/sonarcloud-quality-gate:0.1.4
-              
+          
 pipelines:
-  default:
-    - step:
-        script:
-          - echo "This script runs on all branches that do not have any specific pipeline assigned in 'branches'"
   
   branches:
     master:
       - step: *build-test-sonarcloud
       - step: *check-quality-gate-sonarcloud
-    
+
   pull-requests:
     '**':
       - step: *build-test-sonarcloud
