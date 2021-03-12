@@ -4,8 +4,6 @@
 
 This will create a dockerized stack for our service, made up of one container that houses the images (Nginx, PHP7.4 PHP7.4-fpm, Composer, NPM, Node.js v10.x) needed to run our Lumen application.
 
-In the `docker-compse.yml` file, the container name is set to ServiceScaffold. You should change this
-
 ### **Directory Structure**
 ```
 +-- .git
@@ -15,10 +13,14 @@ In the `docker-compse.yml` file, the container name is set to ServiceScaffold. Y
 |   +-- supervisord.conf
 |   +-- www.conf
 +-- src <project root>
++-- .dockerignore
 +-- .gitignore
++-- .bitbucket-pipelines.yml
 +-- docker-compose.yml
++-- docker-ssh-setup.sh
 +-- Dockerfile
-+-- Dockerfile.nonlocal
++-- Dockerfile.staging
++-- migrate-db.sh
 +-- readme.md <this file>
 ```
 
@@ -28,13 +30,13 @@ Depending on your OS, the appropriate version of Docker Community Edition has to
 
 ### **How To Install**
 
-1. Create a new directory in which your OS user has full read/write access and clone this repository inside. Clone using your app password.
+1. Create a new directory in which your OS user has full read/write access and clone this repository inside. Clone using your [bitbucket app password](https://support.atlassian.com/bitbucket-cloud/docs/app-passwords/) i.e `git clone https://username:apppassword@bitbucket.org/cashenvoy-engineering/service-scaffold.git`. Replace **username** with your bitbucket username and **apppassword** with your bitbucket app password.
 
 2. Open a new terminal/CMD, navigate to this repository root (where `docker-compose.yml` exists).
 
-3. Update the remote upstream to point to your repo using: `git remote set-url origin <repo_url>`.
+3. Update the remote upstream to point to your repository using: `git remote set-url origin [repo_url]`. Replace `[repo_url]` with your repository url.
 
-4. Update the values of services.app.container_name and services.app.ports as required. **N.B:** Remember to branch off master before making edits to the source code.
+4. In your `docker-compose.yml` update the container name by editing the value of services.app.container_name. By default this is set to **ServiceScaffold**. Also, by default, port 80 in your docker container is mapped to port 8000 on your local machine in the `docker-compose.yml`; if you already have some service running on port 8000 you should map port 80 to a different port before you proceed.
 
 5. Execute the following command:
 
@@ -49,7 +51,7 @@ Depending on your OS, the appropriate version of Docker Community Edition has to
     ```
     $ docker exec -it [app_container_name] bash
     ```
-    Replace `app_container_name` with the name of your app container. If successful, the command would open up an interactive shell in the /var/www/html folder.
+    Replace `[app_container_name]` with the name of your app container. If successful, the command would open up an interactive shell in the /var/www/html folder.
 
 7. In that shell, run `$ composer update` to install all your Lumen dependencies.
 
@@ -59,10 +61,18 @@ Depending on your OS, the appropriate version of Docker Community Edition has to
     $ cp .env.example .env
     ```
 
-9. In the `.env` file, you need to assign a value to **APP_KEY**. Laravel allows you to easily generate an app key with `php artisan key:generate` command but Lumen being extremely light weight doesn't come with a lot of artisan commands, so you're going to have to [do this manually](http://www.unit-conversion.info/texttools/random-string-generator/).
+9. In the `.env` file, you need to assign a value to **LUMENWS_APP_KEY**. Laravel allows you to easily generate an app key with `php artisan key:generate` command but Lumen being extremely light weight doesn't come with this and many other artisan commands. Make a GET request to [http://localhost:8000](http://localhost:8000) either on your web browser or Postman to get a valid app key. Assign this key to the **APP_KEY** variable in the `.env` file.
 
-10. Ensure that you have a MySQL server instance running on your local machine. Enter the MySQL connection values into your `.env` file. The host should be set to host.docker.internal.
+**N.B:** This assumes port 80 is mapped to port 8000 in the `docker-compose.yml` file. If you have mapped port 80 to a different port say 6000, your app would run on [http://localhost:6000](http://localhost:6000).
+
+You can edit your `.env` file from the terminal using commands like `vim` or `nano` or from a text editor.
+
+10. Ensure that you have a MySQL server instance running on your local machine. Enter the MySQL connection parameters into your `.env` file. The **LUMENWS_DB_HOST** variable should be set to **host.docker.internal**.
+
+**N.B:** The easiest way to do install and run a MYSQL server on your macOS is using Homebrew. To learn how to install Homebrew on your macOS, [click here](https://brew.sh/). To learn how to install and run a MySQL server on your macOS using Homebrew [click here](https://flaviocopes.com/mysql-how-to-install/). After successfully installing your MySQL server you may choose to download an administration tool such as [MySQL Workbench](https://www.mysql.com/products/workbench/) or [phpMyAdmin](https://www.phpmyadmin.net/). 
 
 11. In your terminal, run `php artisan migrate --seed` to migrate existing tables to your database.
 
-12. That's it! Connect to [http://localhost:your_app_port](http://localhost:your_app_port) on your browser or via Postman. The endpoint should return a 'Welcome to CashEnvoy!' message as part of a JSON response object.
+12. Update the **LUMENWS_** prefix in the `.env.example` and `.env` files to one unique to your app (it should follow the naming convention **SERVICEWS_**). Be sure to update this also in the `app.php`, `database.php` and `queue.php` files in your config folder and to add this prefix to any new environment variables you create in your app.
+
+13. That's it, you're all setup. Now build an awesome service!

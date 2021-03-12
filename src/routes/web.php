@@ -14,6 +14,16 @@
 */
 
 $router->get('/', function() {
+    if(config('app.env') != "production"){
+      return response()->json([
+        'status' => true,
+        'data' => [
+          'key' => Illuminate\Support\Str::random(32),
+        ],
+        'message' => 'Welcome to CashEnvoy!'
+      ], 200);
+    }
+
     return response()->json([
       'status' => true,
       'message' => 'Welcome to CashEnvoy!'

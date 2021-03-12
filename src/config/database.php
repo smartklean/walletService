@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('USERSWS_DB_CONNECTION', 'mysql'),
+    'default' => env('LUMENWS_DB_CONNECTION', 'mysql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -43,11 +43,11 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'host' => env('USERSWS_DB_HOST', '127.0.0.1'),
-            'port' => env('USERSWS_DB_PORT', 3306),
-            'database' => env('USERSWS_DB_DATABASE', 'forge'),
-            'username' => env('USERSWS_DB_USERNAME', 'forge'),
-            'password' => env('USERSWS_DB_PASSWORD', ''),
+            'host' => env('LUMENWS_DB_HOST', '127.0.0.1'),
+            'port' => env('LUMENWS_DB_PORT', 3306),
+            'database' => env('LUMENWS_DB_DATABASE', 'forge'),
+            'username' => env('LUMENWS_DB_USERNAME', 'forge'),
+            'password' => env('LUMENWS_DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => env('DB_CHARSET', 'utf8'),
             'collation' => env('DB_COLLATION', 'utf8_general_ci'),
