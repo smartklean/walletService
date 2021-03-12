@@ -38,7 +38,7 @@ return [
         'sqlite' => [
             'driver' => 'sqlite',
             'database' => env('DB_DATABASE', database_path('database.sqlite')),
-            'prefix' => env('DB_PREFIX', ''),
+            'prefix' => env('DB_PREFIX', config('constants.db.prefix')),
         ],
 
         'mysql' => [
@@ -75,13 +75,13 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => env('DB_HOST', '127.0.0.1'),
+            'host' => env('DB_HOST', config('constants.db.host')),
             'port' => env('DB_PORT', 5432),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => env('DB_CHARSET', 'utf8'),
-            'prefix' => env('DB_PREFIX', ''),
+            'database' => env('DB_DATABASE', config('constants.db.database')),
+            'username' => env('DB_USERNAME', config('constants.db.username')),
+            'password' => env('DB_PASSWORD', config('constants.db.password')),
+            'charset' => env('DB_CHARSET', config('constants.db.charset')),
+            'prefix' => env('DB_PREFIX', config('constants.db.prefix')),
             'schema' => env('DB_SCHEMA', 'public'),
             'sslmode' => env('DB_SSL_MODE', 'prefer'),
         ],
@@ -90,11 +90,11 @@ return [
             'driver' => 'sqlsrv',
             'host' => env('DB_HOST', 'localhost'),
             'port' => env('DB_PORT', 1433),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => env('DB_CHARSET', 'utf8'),
-            'prefix' => env('DB_PREFIX', ''),
+            'database' => env('DB_DATABASE', config('constants.db.database')),
+            'username' => env('DB_USERNAME', config('constants.db.username')),
+            'password' => env('DB_PASSWORD', config('constants.db.password')),
+            'charset' => env('DB_CHARSET', config('constants.db.charset')),
+            'prefix' => env('DB_PREFIX', config('constants.db.prefix')),
         ],
 
     ],
@@ -134,7 +134,7 @@ return [
 
         'default' => [
             'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'host' => env('REDIS_HOST', config('constants.db.host')),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_DB', '0'),
@@ -142,7 +142,7 @@ return [
 
         'cache' => [
             'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'host' => env('REDIS_HOST', config('constants.db.host')),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_CACHE_DB', '1'),
