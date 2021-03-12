@@ -63,13 +63,13 @@ Depending on your OS, the appropriate version of Docker Community Edition has to
 
 9. In the `.env` file, you need to assign a value to **LUMENWS_APP_KEY**. Laravel allows you to easily generate an app key with `php artisan key:generate` command but Lumen being extremely light weight doesn't come with this and many other artisan commands. Make a GET request to [http://localhost:8000](http://localhost:8000) either on your web browser or Postman to get a valid app key. Assign this key to the **APP_KEY** variable in the `.env` file.
 
-**N.B:** This assumes port 80 is mapped to port 8000 in the `docker-compose.yml` file. If you have mapped port 80 to a different port say 6000, your app would run on [http://localhost:6000](http://localhost:6000).
+    **N.B:** This assumes port 80 is mapped to port 8000 in the `docker-compose.yml` file. If you have mapped port 80 to a different port say 6000, your app would run on [http://localhost:6000](http://localhost:6000).
 
-You can edit your `.env` file from the terminal using commands like `vim` or `nano` or from a text editor.
+    You can edit your `.env` file from the terminal using commands like `vim` or `nano` or from a text editor.
 
 10. Ensure that you have a MySQL server instance running on your local machine. Enter the MySQL connection parameters into your `.env` file. The **LUMENWS_DB_HOST** variable should be set to **host.docker.internal**.
 
-**N.B:** The easiest way to do install and run a MYSQL server on your macOS is using Homebrew. To learn how to install Homebrew on your macOS, [click here](https://brew.sh/). To learn how to install and run a MySQL server on your macOS using Homebrew [click here](https://flaviocopes.com/mysql-how-to-install/). After successfully installing your MySQL server you may choose to download an administration tool such as [MySQL Workbench](https://www.mysql.com/products/workbench/) or [phpMyAdmin](https://www.phpmyadmin.net/). 
+    **N.B:** The easiest way to do install and run a MYSQL server on your macOS is using Homebrew. To learn how to install Homebrew on your macOS, [click here](https://brew.sh/). To learn how to install and run a MySQL server on your macOS using Homebrew [click here](https://flaviocopes.com/mysql-how-to-install/). After successfully installing your MySQL server you may choose to download an administration tool such as [MySQL Workbench](https://www.mysql.com/products/workbench/) or [phpMyAdmin](https://www.phpmyadmin.net/). 
 
 11. In your terminal, run `php artisan migrate --seed` to migrate existing tables to your database.
 
