@@ -34,53 +34,37 @@ return [
     */
 
     'connections' => [
-
-        'sqlite' => [
-            'driver' => 'sqlite',
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
-            'prefix' => env('DB_PREFIX', ''),
-        ],
-
         'mysql' => [
             'driver' => 'mysql',
-            'host' => env('LUMENWS_DB_HOST', '127.0.0.1'),
-            'port' => env('LUMENWS_DB_PORT', 3306),
-            'database' => env('LUMENWS_DB_DATABASE', 'forge'),
-            'username' => env('LUMENWS_DB_USERNAME', 'forge'),
-            'password' => env('LUMENWS_DB_PASSWORD', ''),
-            'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => env('DB_CHARSET', 'utf8'),
-            'collation' => env('DB_COLLATION', 'utf8_general_ci'),
-            'prefix' => env('DB_PREFIX', ''),
-            'strict' => env('DB_STRICT_MODE', true),
-            'engine' => env('DB_ENGINE', 'InnoDB'),
-            'timezone' => env('DB_TIMEZONE', '+00:00'),
+            'host' => env('LUMENWS_DB_HOST'),
+            'port' => env('LUMENWS_DB_PORT'),
+            'database' => env('LUMENWS_DB_DATABASE'),
+            'username' => env('LUMENWS_DB_USERNAME'),
+            'password' => env('LUMENWS_DB_PASSWORD',
+            'unix_socket' => env('LUMENWS_DB_SOCKET', config('constants.db.socket')),
+            'charset' => env('LUMENWS_DB_CHARSET', config('constants.db.charset')),
+            'collation' => env('LUMENWS_DB_COLLATION', config('constants.db.collation')),
+            'prefix' => env('LUMENWS_DB_PREFIX', config('constants.db.prefix')),
+            'strict' => env('LUMENWS_STRICT_MODE', config('constants.db.strict')),
+            'engine' => env('LUMENWS_DB_ENGINE', config('constants.db.engine')),
+            'timezone' => env('LUMENWS_DB_TIMEZONE', config('constants.db.timezone')),
         ],
 
-        'pgsql' => [
-            'driver' => 'pgsql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', 5432),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => env('DB_CHARSET', 'utf8'),
-            'prefix' => env('DB_PREFIX', ''),
-            'schema' => env('DB_SCHEMA', 'public'),
-            'sslmode' => env('DB_SSL_MODE', 'prefer'),
+        'mysql_test' => [
+            'driver' => 'mysql',
+            'host' => env('LUMENWS_TEST_DB_HOST'),
+            'port' => env('LUMENWS_TEST_DB_PORT'),
+            'database' => env('LUMENWS_TEST_DB_DATABASE'),
+            'username' => env('LUMENWS_TEST_DB_USERNAME'),
+            'password' => env('LUMENWS_TEST_DB_PASSWORD'),
+            'unix_socket' => env('LUMENWS_TEST_DB_SOCKET', config('constants.db.socket')),
+            'charset' => env('LUMENWS_TEST_DB_CHARSET', config('constants.db.charset')),
+            'collation' => env('LUMENWS_TEST_DB_COLLATION', config('constants.db.collation')),
+            'prefix' => env('LUMENWS_TEST_DB_PREFIX', config('constants.db.prefix')),
+            'strict' => env('LUMENWS_TEST_STRICT_MODE', config('constants.db.strict')),
+            'engine' => env('LUMENWS_TEST_DB_ENGINE', config('constants.db.engine')),
+            'timezone' => env('LUMENWS_TEST_DB_TIMEZONE', config('constants.db.timezone')),
         ],
-
-        'sqlsrv' => [
-            'driver' => 'sqlsrv',
-            'host' => env('DB_HOST', 'localhost'),
-            'port' => env('DB_PORT', 1433),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => env('DB_CHARSET', 'utf8'),
-            'prefix' => env('DB_PREFIX', ''),
-        ],
-
     ],
 
     /*
@@ -95,43 +79,4 @@ return [
     */
 
     'migrations' => 'migrations',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Redis Databases
-    |--------------------------------------------------------------------------
-    |
-    | Redis is an open source, fast, and advanced key-value store that also
-    | provides a richer set of commands than a typical key-value systems
-    | such as APC or Memcached. Laravel makes it easy to dig right in.
-    |
-    */
-
-    'redis' => [
-
-        'client' => env('REDIS_CLIENT', 'phpredis'),
-
-        'options' => [
-            'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'lumen'), '_').'_database_'),
-        ],
-
-        'default' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_DB', '0'),
-        ],
-
-        'cache' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_CACHE_DB', '1'),
-        ],
-
-    ],
-
 ];

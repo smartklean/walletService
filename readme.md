@@ -69,10 +69,10 @@ Depending on your OS, the appropriate version of Docker Community Edition has to
 
 10. Ensure that you have a MySQL server instance running on your local machine. Enter the MySQL connection parameters into your `.env` file. The **LUMENWS_DB_HOST** variable should be set to **host.docker.internal**.
 
-    **N.B:** The easiest way to do install and run a MYSQL server on your macOS is using Homebrew. To learn how to install Homebrew on your macOS, [click here](https://brew.sh/). To learn how to install and run a MySQL server on your macOS using Homebrew [click here](https://flaviocopes.com/mysql-how-to-install/). After successfully installing your MySQL server you may choose to download an administration tool such as [MySQL Workbench](https://www.mysql.com/products/workbench/) or [phpMyAdmin](https://www.phpmyadmin.net/). 
+    **N.B:** The easiest way to do install and run a MYSQL server on your macOS is using Homebrew. To learn how to install Homebrew on your macOS, [click here](https://brew.sh/). To learn how to install and run a MySQL server on your macOS using Homebrew [click here](https://flaviocopes.com/mysql-how-to-install/). After successfully installing your MySQL server you may choose to download an administration tool such as [MySQL Workbench](https://www.mysql.com/products/workbench/) or [phpMyAdmin](https://www.phpmyadmin.net/).
 
 11. In your terminal, run `php artisan migrate --seed` to migrate existing tables to your database.
 
-12. Update the **LUMENWS_** prefix in the `.env.example` and `.env` files to one unique to your app (it should follow the naming convention **SERVICEWS_**). Be sure to update this also in the `app.php`, `database.php` and `queue.php` files in your config folder and to add this prefix to any new environment variables you create in your app.
+12. Update the **LUMENWS_** prefix in the `.env.example`, `.env` and `phpunit.xml` files to one unique to your app (it should follow the naming convention **SERVICEWS_**). Be sure to also update this in the `app.php`, `database.php` and `queue.php` files in your config folder and to add this prefix to any new environment variables you create in your app.
 
 13. That's it, you're all setup. Now build an awesome service!
