@@ -85,37 +85,34 @@ Migrations should be used in an iterative manner, in order words once a migratio
 
 We create a new migration that holds the Schema for a users table:
 
-   ```
-   public function up()
-    {
-        Schema::create('users', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name')->nullable();
-            $table->string('email')->unique();
-            $table->string('password', 60);
-            $table->dateTime('password_updated_at')->nullable();
-            $table->rememberToken();
-            $table->timestamps();
-        });
-    }
+  ```
+   public function up() {
+       Schema::create('users', function (Blueprint $table) {
+           $table->increments('id');
+           $table->string('name')->nullable();
+           $table->string('email')->unique();
+           $table->string('password', 60);
+           $table->dateTime('password_updated_at')->nullable();
+           $table->rememberToken();
+           $table->timestamps();
+       });
+   }
 
-    public function down()
-    {
-        Schema::drop('users');
-    }
-   ```
+   public function down() {
+       Schema::drop('users');
+   }
+  ```
 
  After running the above migration, we want to modify the Schema by adding two new columns **birthday** and **active**, so we create and run a new migration while the above remains untouched:
 
-    ```
-    public function up()
-    {
-       Schema::table('users', function (Blueprint $table) {
-           $table->date('birthday')->nullable();
-           $table->boolean('active')->default(0);
-       });
-    }
-    ```
+  ```
+  public function up() {
+     Schema::table('users', function (Blueprint $table) {
+         $table->date('birthday')->nullable();
+         $table->boolean('active')->default(0);
+     });
+  }
+  ```
 
 ### **Naming Convention For Routes**
 
