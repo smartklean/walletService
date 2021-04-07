@@ -83,10 +83,10 @@ Depending on your OS, the appropriate version of Docker Community Edition has to
 
 Migrations should be used in an iterative manner, in order words once a migration for a new Schema is created, any modifications to the Schema **should be made via a new migration**. Consider the following example:
 
-1. We create a new migration that holds the Schema for a users table:
+We create a new migration that holds the Schema for a users table:
 
    ```
-    public function up()
+   public function up()
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
@@ -105,7 +105,7 @@ Migrations should be used in an iterative manner, in order words once a migratio
     }
    ```
 
- 2. After running the above migration, we want to modify the Schema by adding two new columns **birthday** and **active**, so we create and run a new migration while the above remains untouched:
+ After running the above migration, we want to modify the Schema by adding two new columns **birthday** and **active**, so we create and run a new migration while the above remains untouched:
 
     ```
     public function up()
