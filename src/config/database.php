@@ -40,7 +40,7 @@ return [
             'port' => env('LUMENWS_DB_PORT'),
             'database' => env('LUMENWS_DB_DATABASE'),
             'username' => env('LUMENWS_DB_USERNAME'),
-            'password' => env('LUMENWS_DB_PASSWORD',
+            'password' => env('LUMENWS_DB_PASSWORD'),
             'unix_socket' => env('LUMENWS_DB_SOCKET', config('constants.db.socket')),
             'charset' => env('LUMENWS_DB_CHARSET', config('constants.db.charset')),
             'collation' => env('LUMENWS_DB_COLLATION', config('constants.db.collation')),

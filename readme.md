@@ -76,3 +76,51 @@ Depending on your OS, the appropriate version of Docker Community Edition has to
 12. Update the **LUMENWS_** prefix in the `.env.example`, `.env` and `phpunit.xml` files to one unique to your app (it should follow the naming convention **SERVICEWS_**). Be sure to also update this in the `app.php`, `database.php` and `queue.php` files in your config folder and to add this prefix to any new environment variables you create in your app.
 
 13. That's it, you're all setup. Now build an awesome service!
+
+### **How To Use Migrations**
+
+**TL/DR:** Once a migration is created and run, it is immutable. Any modifications to an existing Schema should be made via a new migration.
+
+Migrations should be used in an iterative manner, in order words once a migration for a new Schema is created, any modifications to the Schema **should be made via a new migration**. Consider the following example:
+
+1. We create a new migration that holds the Schema for a users table:
+
+   ```
+    public function up()
+    {
+        Schema::create('users', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name')->nullable();
+            $table->string('email')->unique();
+            $table->string('password', 60);
+            $table->dateTime('password_updated_at')->nullable();
+            $table->rememberToken();
+            $table->timestamps();
+        });
+    }
+
+    public function down()
+    {
+        Schema::drop('users');
+    }
+   ```
+
+ 2. After running the above migration, we want to modify the Schema by adding two new columns **birthday** and **active**, so we create and run a new migration while the above remains untouched:
+
+    ```
+    public function up()
+    {
+       Schema::table('users', function (Blueprint $table) {
+           $table->date('birthday')->nullable();
+           $table->boolean('active')->default(0);
+       });
+    }
+    ```
+
+### **Naming Convention For Routes**
+
+Routes should be named following this convention: **api/vX/service_name/[routes]**. The only exception is the **health check route**.
+
+### **Naming Convention For Branches**
+
+Branches should be named following either one of these conventions: **feature/branch_name**, **bugfix/branch_name** or **hotfix/branch_name**.
