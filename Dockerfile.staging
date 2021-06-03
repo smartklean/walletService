@@ -9,7 +9,7 @@ FROM ubuntu:18.04
 
 # Install common tools
 RUN apt-get update \
-    && apt-get install -y wget curl vim nano inetutils-ping htop git unzip bzip2 software-properties-common locales
+    && apt-get install -y wget curl vim nano inetutils-ping htop git unzip bzip2 software-properties-common locales jq
 
 # Install SSH
 RUN apt-get update \
