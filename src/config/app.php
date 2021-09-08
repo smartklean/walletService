@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('LUMENWS_APP_NAME', 'Lumen'),
+    'name' => env('CONSUMERWS_APP_NAME', 'Lumen'),
 
     /*
     |--------------------------------------------------------------------------
@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'env' => env('LUMENWS_APP_ENV', 'production'),
+    'env' => env('CONSUMERWS_APP_ENV', 'production'),
 
     /*
     |--------------------------------------------------------------------------
@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'debug' => (bool) env('LUMENWS_APP_DEBUG', false),
+    'debug' => (bool) env('CONSUMERWS_APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('LUMENWS_APP_URL', 'http://localhost'),
+    'url' => env('CONSUMERWS_APP_URL', 'http://localhost'),
 
     /*
     |--------------------------------------------------------------------------
@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => env('LUMENWS_APP_TIMEZONE', 'UTC'),
+    'timezone' => env('CONSUMERWS_APP_TIMEZONE', 'UTC'),
 
     /*
     |--------------------------------------------------------------------------
@@ -104,7 +104,7 @@ return [
     |
     */
 
-    'key' => env('LUMENWS_APP_KEY'),
+    'key' => env('CONSUMERWS_APP_KEY'),
 
     'cipher' => 'AES-256-CBC',
 

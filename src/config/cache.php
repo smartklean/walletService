@@ -17,7 +17,7 @@ return [
     |
     */
 
-    'default' => env('USERWS_CACHE_DRIVER', 'file'),
+    'default' => env('CONSUMERWS_CACHE_DRIVER', 'file'),
 
     /*
     |--------------------------------------------------------------------------

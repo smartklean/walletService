@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('LUMENWS_QUEUE_CONNECTION', 'sync'),
+    'default' => env('CONSUMERWS_QUEUE_CONNECTION', 'sync'),
 
     /*
     |--------------------------------------------------------------------------

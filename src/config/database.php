@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('LUMENWS_DB_CONNECTION', 'mysql'),
+    'default' => env('CONSUMERWS_DB_CONNECTION', 'mysql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -36,34 +36,34 @@ return [
     'connections' => [
         'mysql' => [
             'driver' => 'mysql',
-            'host' => env('LUMENWS_DB_HOST'),
-            'port' => env('LUMENWS_DB_PORT'),
-            'database' => env('LUMENWS_DB_DATABASE'),
-            'username' => env('LUMENWS_DB_USERNAME'),
-            'password' => env('LUMENWS_DB_PASSWORD'),
-            'unix_socket' => env('LUMENWS_DB_SOCKET', config('constants.db.socket')),
-            'charset' => env('LUMENWS_DB_CHARSET', config('constants.db.charset')),
-            'collation' => env('LUMENWS_DB_COLLATION', config('constants.db.collation')),
-            'prefix' => env('LUMENWS_DB_PREFIX', config('constants.db.prefix')),
-            'strict' => env('LUMENWS_STRICT_MODE', config('constants.db.strict')),
-            'engine' => env('LUMENWS_DB_ENGINE', config('constants.db.engine')),
-            'timezone' => env('LUMENWS_DB_TIMEZONE', config('constants.db.timezone')),
+            'host' => env('CONSUMERWS_DB_HOST'),
+            'port' => env('CONSUMERWS_DB_PORT'),
+            'database' => env('CONSUMERWS_DB_DATABASE'),
+            'username' => env('CONSUMERWS_DB_USERNAME'),
+            'password' => env('CONSUMERWS_DB_PASSWORD'),
+            'unix_socket' => env('CONSUMERWS_DB_SOCKET', config('constants.db.socket')),
+            'charset' => env('CONSUMERWS_DB_CHARSET', config('constants.db.charset')),
+            'collation' => env('CONSUMERWS_DB_COLLATION', config('constants.db.collation')),
+            'prefix' => env('CONSUMERWS_DB_PREFIX', config('constants.db.prefix')),
+            'strict' => env('CONSUMERWS_STRICT_MODE', config('constants.db.strict')),
+            'engine' => env('CONSUMERWS_DB_ENGINE', config('constants.db.engine')),
+            'timezone' => env('CONSUMERWS_DB_TIMEZONE', config('constants.db.timezone')),
         ],
 
         'mysql_test' => [
             'driver' => 'mysql',
-            'host' => env('LUMENWS_TEST_DB_HOST'),
-            'port' => env('LUMENWS_TEST_DB_PORT'),
-            'database' => env('LUMENWS_TEST_DB_DATABASE'),
-            'username' => env('LUMENWS_TEST_DB_USERNAME'),
-            'password' => env('LUMENWS_TEST_DB_PASSWORD'),
-            'unix_socket' => env('LUMENWS_TEST_DB_SOCKET', config('constants.db.socket')),
-            'charset' => env('LUMENWS_TEST_DB_CHARSET', config('constants.db.charset')),
-            'collation' => env('LUMENWS_TEST_DB_COLLATION', config('constants.db.collation')),
-            'prefix' => env('LUMENWS_TEST_DB_PREFIX', config('constants.db.prefix')),
-            'strict' => env('LUMENWS_TEST_STRICT_MODE', config('constants.db.strict')),
-            'engine' => env('LUMENWS_TEST_DB_ENGINE', config('constants.db.engine')),
-            'timezone' => env('LUMENWS_TEST_DB_TIMEZONE', config('constants.db.timezone')),
+            'host' => env('CONSUMERWS_TEST_DB_HOST'),
+            'port' => env('CONSUMERWS_TEST_DB_PORT'),
+            'database' => env('CONSUMERWS_TEST_DB_DATABASE'),
+            'username' => env('CONSUMERWS_TEST_DB_USERNAME'),
+            'password' => env('CONSUMERWS_TEST_DB_PASSWORD'),
+            'unix_socket' => env('CONSUMERWS_TEST_DB_SOCKET', config('constants.db.socket')),
+            'charset' => env('CONSUMERWS_TEST_DB_CHARSET', config('constants.db.charset')),
+            'collation' => env('CONSUMERWS_TEST_DB_COLLATION', config('constants.db.collation')),
+            'prefix' => env('CONSUMERWS_TEST_DB_PREFIX', config('constants.db.prefix')),
+            'strict' => env('CONSUMERWS_TEST_STRICT_MODE', config('constants.db.strict')),
+            'engine' => env('CONSUMERWS_TEST_DB_ENGINE', config('constants.db.engine')),
+            'timezone' => env('CONSUMERWS_TEST_DB_TIMEZONE', config('constants.db.timezone')),
         ],
     ],
 
