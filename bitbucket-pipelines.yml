@@ -9,25 +9,69 @@ clone:
 definitions:
   services:
     docker:
-      memory: 2048
+      memory: 2048 
+    mysql:
+      image: mysql
+      environment:
+        MYSQL_DATABASE: 'homestead'
+        MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+        MYSQL_USER: 'homestead'
+        MYSQL_PASSWORD: 'secret'
 
   caches:
     sonar: ~/.sonar/cache  # Caching SonarCloud artifacts will speed up your build
-
+  
   steps:
     - step: &build-test-sonarcloud
         name: Build, test and analyze on SonarCloud
         caches:
           - docker
+          - composer
           - sonar
         script:
-          - pipe: sonarsource/sonarcloud-scan:1.2.0
+          - cd src && composer update && composer --version
+          - echo "sonar.php.tests.reportPath=/opt/atlassian/pipelines/agent/build/src/test-reports/phpunit.junit.xml" > sonar-project.properties
+          - echo "sonar.php.coverage.reportPaths=/opt/atlassian/pipelines/agent/build/src/test-reports/phpunit.coverage.xml" >> sonar-project.properties
+          - chmod 755 sonar-project.properties && cp .env.example .env
+          - sed -ir "s/^[#]*\s*${ENV_VAR_PREFIX}DB_HOST=.*/${ENV_VAR_PREFIX}DB_HOST=127.0.0.1/" .env
+          - sed -ir "s/^[#]*\s*${ENV_VAR_PREFIX}TEST_DB_HOST=.*/${ENV_VAR_PREFIX}TEST_DB_HOST=127.0.0.1/" .env
+          - php artisan migrate --force --no-interaction -vvv
+          - ./vendor/bin/phpunit --log-junit ./test-reports/phpunit.junit.xml #--coverage-clover ./test-reports/phpunit.coverage.xml
+          - pipe: sonarsource/sonarcloud-scan:1.2.1
+          - rm -rf .env .envr sonar-project.properties && cd ..
+        services:
+          - mysql
     - step: &check-quality-gate-sonarcloud
         name: Check the Quality Gate on SonarCloud
         script:
           - pipe: sonarsource/sonarcloud-quality-gate:0.1.4
+    - step: &deploy-to-staging
+        name: Deploy to Staging
+        caches:
+          - docker
+          - composer
+        deployment: Staging
+        script:
+          - cp -r /usr/local/bin/deploykit/* ./ && ls -latr
+          - echo "Deploying To Staging Environment"
+          - ./appws_deploy.sh Staging Webservice
+        services:
+          - docker
+    - step: &deploy-to-production
+        name: Deploy to Production
+        caches:
+          - docker
+          - composer
+        deployment: Production
+        script:
+          - echo "Deploying To Production Environment - Coming Soon"
+        services:
+          - docker
           
 pipelines:
+  custom:
+    deploy-to-staging:
+     - step: *deploy-to-staging 
   
   branches:
     master:

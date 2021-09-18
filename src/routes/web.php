@@ -35,3 +35,37 @@ $router->get('/health', function() {
       'status' => true,
     ], 200);
 });
+
+
+$router->group([
+  'prefix' => 'api',
+], function() use ($router) {
+  /* Version 1 */
+  $router->group([
+    'prefix' => 'v1'
+  ], function() use ($router) {
+    /* Consumer*/
+    $router->group([
+      'prefix' => 'consumer'
+    ], function() use ($router) {
+      $router->get('/', 'Apis\v1\ConsumerController@fetch');
+      $router->get('/search', 'Apis\v1\ConsumerController@search');
+      $router->put('/{id}', 'Apis\v1\ConsumerController@update');
+      $router->put('/{id}/blacklist', 'Apis\v1\ConsumerController@blacklistToggle');
+      $router->post('/', 'Apis\v1\ConsumerController@store');
+      $router->delete('/{id}', 'Apis\v1\ConsumerController@destroy');
+      
+       /* Type */
+       $router->group([
+        'prefix' => 'type'
+      ], function() use ($router) {
+        
+      });
+
+      
+
+
+    });
+  });
+  /* Version 1 */
+});
