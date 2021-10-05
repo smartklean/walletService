@@ -14,10 +14,11 @@ class Consumer extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        
+    protected $fillable = [   
         'email',
     ];
 
-    
+    public function setEmailAttribute($value){
+        return $this->attributes['email'] = trim(strtolower($value));
+    }
 }

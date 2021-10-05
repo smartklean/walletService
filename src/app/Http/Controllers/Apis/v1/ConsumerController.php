@@ -7,13 +7,11 @@ use App\Models\Consumer;
 use App\Models\BusinessConsumer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Consumer as ConsumerResource;
-use App\Http\Resources\BusinessConsumer as BusinessConsumerResource;
 use App\Http\Traits\HandlesConsumer;
-use App\Http\Traits\HandlesBusinessConsumer;
 use App\Http\Traits\HandlesJsonResponse;
 use Illuminate\Support\Str;
 use DB;
+use Carbon\Carbon;
 
 
 class ConsumerController extends Controller{
@@ -23,7 +21,7 @@ class ConsumerController extends Controller{
      * @return void
      */
 
-    use HandlesConsumer, HandlesBusinessConsumer, HandlesJsonResponse;
+    use HandlesConsumer, HandlesJsonResponse;
 
     private $foundMultipleMessage = 'response.messages.found_multiple';
     private $notFoundError = 'response.errors.not_found';
@@ -37,7 +35,9 @@ class ConsumerController extends Controller{
     private $notFoundErrorCode = 'response.codes.not_found_error';
     private $consumerAttribute = 'consumer';
     private $consumersAttribute = 'consumers';
-    private $isNullableBoolean = 'nullable|boolean';
+    private $isBoolean = 'boolean';
+    private $isRequiredBoolean = 'required|boolean';
+    private $isRequiredInteger = 'required|integer';
     private $isNullableInteger = 'nullable|integer';
     private $isNullableString = 'nullable|string|max:255';
     private $isRequiredEmail =  'required|email|max:255';
@@ -54,17 +54,23 @@ class ConsumerController extends Controller{
     private $is_live =  'is_live';
     private $keyword = 'keyword';
     private $is_blacklisted =  'is_blacklisted';
+    private $updated_at = 'updated_at';
     private $consumerEntity;
 
 
     public function fetch(Request $request){
-        $consumer = $this->fetchConsumer($request);
-        return (new ConsumerResource($consumer))
-                ->additional([
-                    'status' => true,
-                    'code' => __($this->successCode),
-                    'message' => __($this->foundMultipleMessage, ['attr' => $this->consumersAttribute]),
-                ], 200);
+
+        $consumer = $this->fetchConsumers($request->is_live, $request->business_id );
+        
+        return $this->jsonResponse(__($this->foundMultipleMessage, ['attr' => $this->consumersAttribute]), __($this->successCode), 200, $consumer);
+    
+    }
+
+    public function getConsumer(Request $request, $id){
+
+        $consumer = $this->fetchConsumer( $request->business_id, $id, $request->is_live);
+        
+        return $this->jsonResponse(__($this->foundMultipleMessage, ['attr' => $this->consumersAttribute]), __($this->successCode), 200, $consumer);
     }
 
     public function search(Request $request){
@@ -80,7 +86,10 @@ class ConsumerController extends Controller{
         }
 
         $keyword = $request->input('keyword');
-            $result = BusinessConsumer::where($this->first_name, "LIKE","%$keyword%")
+
+        $table = $request->is_live ? 'business_consumers' : 'test_business_consumers';
+        
+            $result = DB::table($table)->where($this->first_name, "LIKE","%$keyword%")
                 ->where($this->business_id, '=', $request->input('business_id'))
                  ->orWhere($this->last_name, "LIKE", "%$keyword%")
                  ->where($this->business_id, '=', $request->input('business_id'))
@@ -94,141 +103,77 @@ class ConsumerController extends Controller{
                     $query->where($this->email, 'like', '%'.$keyword.'%');
                 })->get();
     
-        return (new ConsumerResource($result))
-        ->additional([
-            'status' => true,
-            'code' => __($this->successCode),
-            'message' => __($this->foundMultipleMessage, ['attr' => $this->consumersAttribute]),
-        ], 200);
-       
+        return $this->jsonResponse(__($this->foundMultipleMessage, ['attr' => $this->consumersAttribute]), __($this->successCode), 200, $result);
+      
     }
 
     public function store(Request $request){
         $rules = [
+            $this->business_id =>$this->isRequiredInteger,
             $this->email =>$this->isRequiredEmail,
-            $this->business_id => $this->isNullableInteger,
-            $this->consumer_id => $this->isNullableInteger,
             $this->last_name => $this->isNullableString,
             $this->first_name => $this->isNullableString,
             $this->phone_number=> $this->isNullableString,
-            $this->is_live => $this->isNullableBoolean,
-            $this->is_blacklisted => $this->isNullableBoolean,
+            $this->is_live => $this->isRequiredBoolean,
         ];
 
         $validator =  Validator::make($request->all(), $rules);
 
         if($validator->fails()){
-        return $this->jsonValidationError($validator);
+            return $this->jsonValidationError($validator);
         }
 
-        DB::transaction(function() use ($request){
-            $consumer = Consumer::firstOrCreate(['email' =>  request('email')]);
-            
-            $businessConsumer = BusinessConsumer::create([
-                $this->business_id=>$request->business_id,
-                $this->consumer_id => $consumer->id,
-                $this->first_name => $request->first_name,
-                $this->last_name => $request->last_name,
-                $this->code => substr(Str_shuffle("0123456789"), 0, 5),
-                $this->phone_number => $request->phone_number,
-            ]);
+        $consumer = Consumer::firstOrCreate(['email' =>  request('email')]);
 
-            $businessConsumer->email = $consumer->email;
+        if(!$this->findConsumer($request->business_id, $consumer->id, $request->is_live)){
+            $code = str_shuffle(sprintf('%05d', mt_rand(1,99999)));
 
-            $this->consumerEntity = $businessConsumer;
+            $table = $request->is_live ? 'business_consumers' : 'test_business_consumers';
 
-        });
-
-        if(!$this->consumerEntity){
-        return $this->jsonResponse(__($this->notAddedMessage, ['attr' => $this->consumerAttribute]), __($this->errorCode), 400, [], __($this->error));
+            DB::insert('insert into '.$table.' (business_id, consumer_id, first_name, last_name, code, phone_number, created_at, updated_at) values (?,?,?,?,?,?,?,?)', [$request->business_id, $consumer->id, $request->first_name, $request->last_name, $code, $request->phone_number,Carbon::now(),Carbon::now() ]);
         }
 
-        return (new ConsumerResource($this->consumerEntity))
-            ->additional([
-                'status' => true,
-                'code' => __($this->successCode),
-                'message' => __($this->addedMessage, ['attr' => $this->consumerAttribute]),
-            ], 201);
+        $data = $this->fetchConsumer($request->business_id, $consumer->id, $request->is_live);
+
+        return $this->jsonResponse(__($this->addedMessage, ['attr' => $this->consumerAttribute]), __($this->successCode), 200, $data);
     }
 
-    public function update(Request $request, $id){
-        $businessConsumer = $this->findBusinessConsumer($id);
-
-        if(!$businessConsumer){
-        return $this->jsonResponse(__($this->notFoundMessage, ['attr' => $this->consumerAttribute]), __($this->notFoundErrorCode), 404, [], __($this->notFoundError));
-        }
-
+    public function update(Request $request, $consumerId, $businessId){
         $rules = [
-            $this->business_id => $this->isNullableInteger,
-            $this->consumer_id => $this->isNullableInteger,
             $this->last_name => $this->isNullableString,
             $this->first_name => $this->isNullableString,
             $this->phone_number=> $this->isNullableString,
-            $this->is_live => $this->isNullableBoolean,
-            $this->is_blacklisted => $this->isNullableBoolean,
+            $this->is_live => $this->isRequiredBoolean,
+            $this->is_blacklisted => $this->isBoolean,
         ];
 
         $validator =  Validator::make($request->all(), $rules);
 
         if($validator->fails()){
-        return $this->jsonValidationError($validator);
-        }
-        
-        $businessConsumer->fill([
-        $this->business_id => $request->business_id ?  $request->business_id : $businessConsumer->business_id,
-        $this->consumer_id => $request->consumer_id ?  $request->consumer_id : $businessConsumer->consumer_id,
-        $this->last_name => $request->last_name ?  $request->last_name : $businessConsumer->last_name,
-        $this->first_name => $request->first_name ?  $request->first_name : $businessConsumer->first_name,
-        $this->phone_number => $request->phone_number ?  $request->phone_number : $businessConsumer->phone_number,
-        $this->is_live => $request->is_live ?  $request->is_live : $businessConsumer->is_live,
-        $this->is_blacklisted => $request->is_blacklisted ?  $request->is_blacklisted : $businessConsumer->is_blacklisted,
-        ])->save();
-            
-        return (new BusinessConsumerResource($businessConsumer))
-            ->additional([
-                'status' => true,
-                'code' => __($this->successCode),
-                'message' => __($this->updatedMessage, ['attr' => $this->consumerAttribute]),
-            ], 200);
-    }
-
-    public function destroy($id){
-        $businessConsumer = $this->findBusinessConsumer($id);
-
-        if(!$businessConsumer){
-        return $this->jsonResponse(__($this->notFoundMessage, ['attr' => $this->consumerAttribute]), __($this->notFoundErrorCode), 404, [], __($this->notFoundError));
+            return $this->jsonValidationError($validator);
         }
 
-        $old = $businessConsumer;
+        $consumer = $this->findConsumer($businessId, $consumerId, $request->is_live);
 
-        $businessConsumer->delete();
-
-        return (new BusinessConsumerResource($old))
-            ->additional([
-                'status' => true,
-                'code' => __($this->successCode),
-                'message' => __($this->deletedMessage, ['attr' => $this->consumerAttribute]),
-            ], 200);
-    }
-
-    public function blacklistToggle(Request $request, $id){
-
-        $businessConsumer = $this->findBusinessConsumer($id);
-
-        if(!$businessConsumer){
-        return $this->jsonResponse(__($this->notFoundMessage, ['attr' => $this->consumerAttribute]), __($this->notFoundErrorCode), 404, [], __($this->notFoundError));
+        if(!$consumer){
+            return $this->jsonResponse(__($this->notFoundMessage, ['attr' => $this->consumerAttribute]), __($this->notFoundErrorCode), 404, [], __($this->notFoundError));
         }
 
-       $this->toggleBlacklist($request, $id );
-        $businessConsumer = BusinessConsumer::find($id);
+        $table = $request->is_live ? 'business_consumers' : 'test_business_consumers';
 
-        return (new BusinessConsumerResource($businessConsumer))
-            ->additional([
-                'status' => true,
-                'code' => __($this->successCode),
-                'message' => __($this->updatedMessage, ['attr' => $this->consumerAttribute]),
-            ], 200);
+        DB::table($table)->where([ [$this->business_id,'=',$businessId],[$this->consumer_id,'=',$consumerId]])->update([
+            $this->last_name => $request->last_name ?  $request->last_name : $consumer->last_name,
+            $this->first_name => $request->first_name ?  $request->first_name : $consumer->first_name,
+            $this->phone_number => $request->phone_number ?  $request->phone_number : $consumer->phone_number,
+            $this->is_blacklisted => $request->is_blacklisted ?  true : false,
+            $this->updated_at => Carbon::now(),
+        ]);
+
+        $data = $this->fetchConsumer($businessId, $consumerId, $request->is_live);
+
+        return $this->jsonResponse(__($this->updatedMessage, ['attr' => $this->consumerAttribute]), __($this->successCode), 200, $data);
 
     }
+
 
 }
