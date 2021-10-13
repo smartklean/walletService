@@ -48,9 +48,9 @@ $router->group([
     $router->group([
       'prefix' => 'consumer'
     ], function() use ($router) {
-      $router->get('/', 'Apis\v1\ConsumerController@fetch');
-      $router->get('/search', 'Apis\v1\ConsumerController@search');
-      $router->get('/{id}', 'Apis\v1\ConsumerController@getConsumer');
+      $router->get('/business/{businessId}', 'Apis\v1\ConsumerController@fetch');
+      $router->get('/search/business/{businessId}', 'Apis\v1\ConsumerController@search');
+      $router->get('/{consumerId}/business/{businessId}', 'Apis\v1\ConsumerController@fetchSingle');
       $router->put('/{consumerId}/business/{businessId}', 'Apis\v1\ConsumerController@update');
       $router->post('/', 'Apis\v1\ConsumerController@store');
     });

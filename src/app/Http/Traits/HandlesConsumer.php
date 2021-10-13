@@ -11,6 +11,57 @@ trait HandlesConsumer{
         return $this->findConsumer($businessId, $consumerId, $isLive);
     }
 
+    private function findConsumer($businessId, $consumerId, $isLive){
+        $table = $isLive ? 'business_consumers' : 'test_business_consumers';
+
+        $consumer = DB::table($table)->where([
+            'business_id' => $businessId,
+            'consumer_id' => $consumerId,
+        ])->first();
+
+        return $consumer ? $consumer : false;
+    }
+
+    public function findConsumerByQuery($businessId, $param, $isLive){
+      $consumerIds = [];
+
+      $records = Consumer::where('email', 'LIKE', "%{$param}%")->get();
+
+      foreach($records as $record){
+        array_push($consumerIds, $record->id);
+      }
+
+      $table = $isLive ? 'business_consumers' : 'test_business_consumers';
+
+      $records = DB::table($table)->where('first_name', 'LIKE', "%{$param}%")
+              ->orWhere('last_name', 'LIKE', "%{$param}%")
+              ->orWhere('phone_number', 'LIKE', "%{$param}%")
+              ->orWhere('code', 'LIKE', "%{$param}%")
+              ->get();
+
+      foreach ($records as $record) {
+        array_push($consumerIds, $record->id);
+      }
+
+      $consumerIds = array_unique($consumerIds);
+
+      $consumers = [];
+
+      foreach($consumerIds as $consumerId){
+        $consumer = $this->fetchConsumer($businessId, $consumerId, $isLive);
+
+        if($consumer){
+          array_push($consumers, $consumer);
+        }
+      }
+
+      return $consumers;
+    }
+
+    public function searchConsumer($businessId, $param, $isLive){
+      return !$param ? $this->fetchConsumers($businessId, $isLive) : $this->findConsumerByQuery($businessId, $param, $isLive);
+    }
+
     public function fetchConsumer($businessId, $consumerId, $isLive){
         $consumer = Consumer::find($consumerId);
 
@@ -34,37 +85,23 @@ trait HandlesConsumer{
         return null;
     }
 
-    private function findConsumer($businessId, $consumerId, $isLive){
+    public function fetchConsumers($businessId, $isLive){
+      $table = $isLive ? 'business_consumers' : 'test_business_consumers';
 
-        if($isLive){
-            $consumer = DB::table('business_consumers')->where([
-                'business_id' => $businessId,
-                'consumer_id' => $consumerId,
-            ])->first();
-    
-            return $consumer ? $consumer : false;
-        }else{
-            $consumer = DB::table('test_business_consumers')->where([
-                'business_id' => $businessId,
-                'consumer_id' => $consumerId,
-            ])->first();
-    
-             return $consumer ? $consumer : false;
+      $businessConsumerData = DB::table($table)->where([
+          'business_id' => $businessId,
+      ])->get();
+
+      $consumers = [];
+
+      if(!$businessConsumerData->isEmpty()){
+        foreach($businessConsumerData as $data){
+          $consumer = $this->fetchConsumer($businessId, $data->consumer_id, $isLive);
+
+          array_push($consumers, $consumer);
         }
-        
+      }
+
+      return $consumers;
     }
-
-    public function fetchConsumers($isLive, $businessId){
-        $table = $isLive ? 'business_consumers' : 'test_business_consumers';
-        $businessConsumer = DB::table($table)->where([
-            'business_id' => $businessId,
-        ])->get();
-
-        if(!$businessConsumer){
-            return null;
-        }
-
-        return $businessConsumer;
-    }
-    
 }
