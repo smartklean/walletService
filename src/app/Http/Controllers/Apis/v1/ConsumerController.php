@@ -104,12 +104,22 @@ class ConsumerController extends Controller{
 
         $consumer = Consumer::firstOrCreate(['email' =>  request('email')]);
 
+        $table = $request->is_live ? 'business_consumers' : 'test_business_consumers';
+
         if(!$this->findConsumer($request->business_id, $consumer->id, $request->is_live)){
             $code = str_shuffle(sprintf('%05d', mt_rand(1,99999)));
 
-            $table = $request->is_live ? 'business_consumers' : 'test_business_consumers';
-
             DB::insert('insert into '.$table.' (business_id, consumer_id, first_name, last_name, code, phone_number, created_at, updated_at) values (?,?,?,?,?,?,?,?)', [$request->business_id, $consumer->id, $request->first_name, $request->last_name, $code, $request->phone_number,Carbon::now(),Carbon::now()]);
+        }else{
+          DB::table($table)->where([
+            $this->businessId => $request->business_id,
+            $this->consumerId => $consumer->id,
+          ])->update([
+              $this->firstName => $request->first_name ?  $request->first_name : $consumer->first_name,
+              $this->lastName => $request->last_name ?  $request->last_name : $consumer->last_name,
+              $this->phoneNumber => $request->phone_number ?  $request->phone_number : $consumer->phone_number,
+              $this->updatedAt => Carbon::now(),
+          ]);
         }
 
         $data = $this->fetchConsumer($request->business_id, $consumer->id, $request->is_live);
