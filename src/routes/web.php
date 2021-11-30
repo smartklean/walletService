@@ -50,6 +50,7 @@ $router->group([
     ], function() use ($router) {
       $router->get('/business/{businessId}', 'Apis\v1\ConsumerController@fetch');
       $router->get('/search/business/{businessId}', 'Apis\v1\ConsumerController@search');
+      $router->get('/email/{email}/business/{id}', 'Apis\v1\ConsumerController@fetchByEmail');
       $router->get('/{consumerId}/business/{businessId}', 'Apis\v1\ConsumerController@fetchSingle');
       $router->put('/{consumerId}/business/{businessId}', 'Apis\v1\ConsumerController@update');
       $router->post('/', 'Apis\v1\ConsumerController@store');
