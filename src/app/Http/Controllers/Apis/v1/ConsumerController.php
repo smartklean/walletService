@@ -65,6 +65,17 @@ class ConsumerController extends Controller{
         return $this->jsonResponse(__($this->foundMultipleMessage, ['attr' => $this->consumersAttribute]), __($this->successCode), 200, $consumer);
     }
 
+    public function fetchByEmail(Request $request, $email, $id){
+      $isLive = $request->is_live ? $request->is_live : false;
+
+      $consumer = $this->fetchConsumerByEmail($id, $email, $isLive);
+
+      $response = !$consumer ? $this->jsonResponse(__($this->notFoundMessage, ['attr' => $this->consumerAttribute]), __($this->notFoundErrorCode), 404, [], __($this->notFoundError))
+      : $this->jsonResponse(__($this->foundMessage, ['attr' => $this->consumerAttribute]), __($this->successCode), 200, $consumer);
+
+      return $response;
+    }
+
     public function fetchSingle(Request $request, $consumerId, $businessId){
         $isLive = $request->is_live ? $request->is_live : false;
 

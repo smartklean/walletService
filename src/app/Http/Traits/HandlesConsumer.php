@@ -62,6 +62,29 @@ trait HandlesConsumer{
       return !$param ? $this->fetchConsumers($businessId, $isLive) : $this->findConsumerByQuery($businessId, $param, $isLive);
     }
 
+    public function fetchConsumerByEmail($businessId, $email, $isLive){
+        $consumer = Consumer::where('email', $email)->first();
+
+        if($consumer){
+            $businessConsumerData = $this->findConsumer($businessId, $consumer->id, $isLive);
+
+            if($businessConsumerData){
+                $consumer->business_id = $businessId;
+                $consumer->first_name = $businessConsumerData->first_name;
+                $consumer->last_name = $businessConsumerData->last_name;
+                $consumer->phone_number = $businessConsumerData->phone_number;
+                $consumer->code = $businessConsumerData->code;
+                $consumer->is_blacklisted = $businessConsumerData->is_blacklisted;
+                $consumer->created_at = $businessConsumerData->created_at;
+                $consumer->updated_at = $businessConsumerData->updated_at;
+
+                return $consumer;
+            }
+        }
+
+        return null;
+    }
+
     public function fetchConsumer($businessId, $consumerId, $isLive){
         $consumer = Consumer::find($consumerId);
 
