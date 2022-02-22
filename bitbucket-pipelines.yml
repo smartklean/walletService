@@ -77,8 +77,8 @@ definitions:
         script:
           - export AWS_WEB_IDENTITY_TOKEN_FILE=$(pwd)/web-identity-token && echo $BITBUCKET_STEP_OIDC_TOKEN > $(pwd)/web-identity-token
           - cp -r /usr/local/bin/deploykit/* ./ && ls -latr
-          - echo "Deploying To Staging Environment"
-          - ./appws_deploy.sh Staging Webservice
+          - echo "Deploying To Production Environment"
+          - ./appws_deploy.sh Production Webservice
         services:
           - docker
 
