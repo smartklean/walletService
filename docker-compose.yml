@@ -7,6 +7,9 @@ services:
       context: .
       target: base
     container_name: ConsumerWS
+    environment:
+      - BASTION1_SSH_PUBLIC_KEY=local
+      - BASTION2_SSH_PUBLIC_KEY=local
     hostname: app
     restart: unless-stopped
     volumes:
