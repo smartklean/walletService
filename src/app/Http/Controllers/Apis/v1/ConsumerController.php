@@ -60,7 +60,7 @@ class ConsumerController extends Controller{
     public function fetch(Request $request, $businessId){
         $isLive = $request->is_live ? $request->is_live : false;
 
-        $consumer = $this->fetchConsumers($businessId, $isLive);
+        $consumer = $request->param ? $this->searchConsumer($businessId, $request->param, $isLive) : $this->fetchConsumers($businessId, $isLive) ;
 
         return $this->jsonResponse(__($this->foundMultipleMessage, ['attr' => $this->consumersAttribute]), __($this->successCode), 200, $consumer);
     }
@@ -85,16 +85,6 @@ class ConsumerController extends Controller{
         : $this->jsonResponse(__($this->foundMessage, ['attr' => $this->consumerAttribute]), __($this->successCode), 200, $consumer);
 
         return $response;
-    }
-
-    public function search(Request $request, $businessId){
-       $param = $request->param;
-
-       $isLive = $request->is_live ? $request->is_live : false;
-
-       $consumers = $this->searchConsumer($businessId, $param, $isLive);
-
-       return $this->jsonResponse(__($this->foundMultipleMessage, ['attr' => $this->consumersAttribute]), __($this->successCode), 200, $consumers);
     }
 
     public function store(Request $request){
