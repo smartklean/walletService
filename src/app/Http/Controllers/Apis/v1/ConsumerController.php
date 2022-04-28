@@ -60,7 +60,13 @@ class ConsumerController extends Controller{
     public function fetch(Request $request, $businessId){
         $isLive = $request->is_live ? $request->is_live : false;
 
-        $consumer = $request->param ? $this->searchConsumer($businessId, $request->param, $isLive) : $this->fetchConsumers($businessId, $isLive) ;
+        if($request->is_blacklisted == 'true' || $request->is_blacklisted == 'false'){
+          $isBlacklisted = $request->is_blacklisted == 'true' ? true : false;
+
+          $consumer = $request->param ? $this->searchConsumer($businessId, $request->param, $isLive, $isBlacklisted) : $this->fetchConsumers($businessId, $isLive, $isBlacklisted);
+        }else{
+          $consumer = $request->param ? $this->searchConsumer($businessId, $request->param, $isLive) : $this->fetchConsumers($businessId, $isLive);
+        }
 
         return $this->jsonResponse(__($this->foundMultipleMessage, ['attr' => $this->consumersAttribute]), __($this->successCode), 200, $consumer);
     }

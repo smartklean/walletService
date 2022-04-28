@@ -28,7 +28,6 @@ return [
 
   'messages' => [
     'added' => 'The :attr was added successfully.',
-    'completeKYC' => 'The :attr was completed.',
     'added_multiple' => 'The :attr were added successfully.',
     'not_added' => 'Something went wrong trying to add the :attr.',
     'updated' => 'The :attr was updated successfully.',
@@ -37,8 +36,8 @@ return [
     'uploaded' => 'The :attr was uploaded successfully.',
     'uploaded_mulitple' => 'The attr: were uploaded successfully.',
     'not_uploaded' => 'Something went wrong trying to upload the :attr.',
-    'found' => 'The :attr was retrived successfully.',
-    'found_multiple' => 'The :attr were retrived successfully.',
+    'found' => 'The :attr was fetched successfully.',
+    'found_multiple' => 'The :attr were fetched successfully.',
     'not_found' => 'The :attr was not found.',
     'not_found_multiple' => 'The :attr were not found.',
     'available' => 'The :attr is available.',
@@ -51,4 +50,3 @@ return [
     'validation' => 'One or more parameters did not pass the validation checks.',
   ]
 ];
-

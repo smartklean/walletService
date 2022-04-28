@@ -11,18 +11,28 @@ trait HandlesConsumer{
         return $this->findConsumer($businessId, $consumerId, $isLive);
     }
 
-    private function findConsumer($businessId, $consumerId, $isLive){
+    private function findConsumer($businessId, $consumerId, $isLive, $isBlacklisted = null){
         $table = $isLive ? 'business_consumers' : 'test_business_consumers';
 
-        $consumer = DB::table($table)->where([
-            'business_id' => $businessId,
-            'consumer_id' => $consumerId,
-        ])->first();
+        if($isBlacklisted){
+          $query = [
+              'business_id' => $businessId,
+              'consumer_id' => $consumerId,
+              'is_blacklisted' => $isBlacklisted
+          ];
+        }else{
+          $query = [
+              'business_id' => $businessId,
+              'consumer_id' => $consumerId,
+          ];
+        }
+
+        $consumer = DB::table($table)->where($query)->first();
 
         return $consumer ? $consumer : false;
     }
 
-    public function findConsumerByQuery($businessId, $param, $isLive){
+    public function findConsumerByQuery($businessId, $param, $isLive, $isBlacklisted = null){
       $consumerIds = [];
 
       $records = Consumer::where('email', 'LIKE', "%{$param}%")->get();
@@ -48,7 +58,7 @@ trait HandlesConsumer{
       $consumers = [];
 
       foreach($consumerIds as $consumerId){
-        $consumer = $this->fetchConsumer($businessId, $consumerId, $isLive);
+        $consumer = $this->fetchConsumer($businessId, $consumerId, $isLive, $isBlacklisted);
 
         if($consumer){
           array_push($consumers, $consumer);
@@ -58,8 +68,8 @@ trait HandlesConsumer{
       return $consumers;
     }
 
-    public function searchConsumer($businessId, $param, $isLive){
-      return !$param ? $this->fetchConsumers($businessId, $isLive) : $this->findConsumerByQuery($businessId, $param, $isLive);
+    public function searchConsumer($businessId, $param, $isLive, $isBlacklisted = null){
+      return !$param ? $this->fetchConsumers($businessId, $isLive, $isBlacklisted) : $this->findConsumerByQuery($businessId, $param, $isLive, $isBlacklisted);
     }
 
     public function fetchConsumerByEmail($businessId, $email, $isLive){
@@ -85,11 +95,11 @@ trait HandlesConsumer{
         return null;
     }
 
-    public function fetchConsumer($businessId, $consumerId, $isLive){
+    public function fetchConsumer($businessId, $consumerId, $isLive, $isBlacklisted = null){
         $consumer = Consumer::find($consumerId);
 
         if($consumer){
-            $businessConsumerData = $this->findConsumer($businessId, $consumerId, $isLive);
+            $businessConsumerData = $this->findConsumer($businessId, $consumerId, $isLive, $isBlacklisted);
 
             if($businessConsumerData){
                 $consumer->business_id = $businessId;
@@ -108,12 +118,22 @@ trait HandlesConsumer{
         return null;
     }
 
-    public function fetchConsumers($businessId, $isLive){
+    public function fetchConsumers($businessId, $isLive, $isBlacklisted = null){
       $table = $isLive ? 'business_consumers' : 'test_business_consumers';
 
-      $businessConsumerData = DB::table($table)->where([
-          'business_id' => $businessId,
-      ])->get();
+      if($isBlacklisted){
+        $query = [
+            'business_id' => $businessId,
+            'is_blacklisted' => $isBlacklisted
+        ];
+      }else{
+        $query = [
+            'business_id' => $businessId,
+        ];
+      }
+
+
+      $businessConsumerData = DB::table($table)->where($query)->get();
 
       $consumers = [];
 
