@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Consumer extends Model
+class Wallet extends Model
 {
     use HasFactory;
 
@@ -14,9 +14,9 @@ class Consumer extends Model
      *
      * @var array
      */
-    protected $fillable = [   
-        'email',
-    ];
+    protected $fillable = [
+        'user_id', 'account_name', 'email', 'wallet_number', 'balance', 'lien', 'is_active',
+      ];
 
     public function setEmailAttribute($value){
         return $this->attributes['email'] = trim(strtolower($value));

@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('CONSUMERWS_DB_CONNECTION', 'mysql'),
+    'default' => env('WALLETWS_DB_CONNECTION', 'mysql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -36,34 +36,34 @@ return [
     'connections' => [
         'mysql' => [
             'driver' => 'mysql',
-            'host' => env('CONSUMERWS_DB_HOST'),
-            'port' => env('CONSUMERWS_DB_PORT'),
-            'database' => env('CONSUMERWS_DB_DATABASE'),
-            'username' => env('CONSUMERWS_DB_USERNAME'),
-            'password' => env('CONSUMERWS_DB_PASSWORD'),
-            'unix_socket' => env('CONSUMERWS_DB_SOCKET', config('constants.db.socket')),
-            'charset' => env('CONSUMERWS_DB_CHARSET', config('constants.db.charset')),
-            'collation' => env('CONSUMERWS_DB_COLLATION', config('constants.db.collation')),
-            'prefix' => env('CONSUMERWS_DB_PREFIX', config('constants.db.prefix')),
-            'strict' => env('CONSUMERWS_STRICT_MODE', config('constants.db.strict')),
-            'engine' => env('CONSUMERWS_DB_ENGINE', config('constants.db.engine')),
-            'timezone' => env('CONSUMERWS_DB_TIMEZONE', config('constants.db.timezone')),
+            'host' => env('WALLETWS_DB_HOST'),
+            'port' => env('WALLETWS_DB_PORT'),
+            'database' => env('WALLETWS_DB_DATABASE'),
+            'username' => env('WALLETWS_DB_USERNAME'),
+            'password' => env('WALLETWS_DB_PASSWORD'),
+            'unix_socket' => env('WALLETWS_DB_SOCKET', config('constants.db.socket')),
+            'charset' => env('WALLETWS_DB_CHARSET', config('constants.db.charset')),
+            'collation' => env('WALLETWS_DB_COLLATION', config('constants.db.collation')),
+            'prefix' => env('WALLETWS_DB_PREFIX', config('constants.db.prefix')),
+            'strict' => env('WALLETWS_STRICT_MODE', config('constants.db.strict')),
+            'engine' => env('WALLETWS_DB_ENGINE', config('constants.db.engine')),
+            'timezone' => env('WALLETWS_DB_TIMEZONE', config('constants.db.timezone')),
         ],
 
         'mysql_test' => [
             'driver' => 'mysql',
-            'host' => env('CONSUMERWS_TEST_DB_HOST'),
-            'port' => env('CONSUMERWS_TEST_DB_PORT'),
-            'database' => env('CONSUMERWS_TEST_DB_DATABASE'),
-            'username' => env('CONSUMERWS_TEST_DB_USERNAME'),
-            'password' => env('CONSUMERWS_TEST_DB_PASSWORD'),
-            'unix_socket' => env('CONSUMERWS_TEST_DB_SOCKET', config('constants.db.socket')),
-            'charset' => env('CONSUMERWS_TEST_DB_CHARSET', config('constants.db.charset')),
-            'collation' => env('CONSUMERWS_TEST_DB_COLLATION', config('constants.db.collation')),
-            'prefix' => env('CONSUMERWS_TEST_DB_PREFIX', config('constants.db.prefix')),
-            'strict' => env('CONSUMERWS_TEST_STRICT_MODE', config('constants.db.strict')),
-            'engine' => env('CONSUMERWS_TEST_DB_ENGINE', config('constants.db.engine')),
-            'timezone' => env('CONSUMERWS_TEST_DB_TIMEZONE', config('constants.db.timezone')),
+            'host' => env('WALLETWS_TEST_DB_HOST'),
+            'port' => env('WALLETWS_TEST_DB_PORT'),
+            'database' => env('WALLETWS_TEST_DB_DATABASE'),
+            'username' => env('WALLETWS_TEST_DB_USERNAME'),
+            'password' => env('WALLETWS_TEST_DB_PASSWORD'),
+            'unix_socket' => env('WALLETWS_TEST_DB_SOCKET', config('constants.db.socket')),
+            'charset' => env('WALLETWS_TEST_DB_CHARSET', config('constants.db.charset')),
+            'collation' => env('WALLETWS_TEST_DB_COLLATION', config('constants.db.collation')),
+            'prefix' => env('WALLETWS_TEST_DB_PREFIX', config('constants.db.prefix')),
+            'strict' => env('WALLETWS_TEST_STRICT_MODE', config('constants.db.strict')),
+            'engine' => env('WALLETWS_TEST_DB_ENGINE', config('constants.db.engine')),
+            'timezone' => env('WALLETWS_TEST_DB_TIMEZONE', config('constants.db.timezone')),
         ],
     ],
 

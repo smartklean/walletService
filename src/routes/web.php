@@ -44,15 +44,17 @@ $router->group([
   $router->group([
     'prefix' => 'v1'
   ], function() use ($router) {
-    /* Consumer*/
+    /* Wallet*/
     $router->group([
-      'prefix' => 'consumer'
+      'prefix' => 'wallet'
     ], function() use ($router) {
-      $router->get('/business/{businessId}', 'Apis\v1\ConsumerController@fetch');
-      $router->get('/email/{email}/business/{id}', 'Apis\v1\ConsumerController@fetchByEmail');
-      $router->get('/{consumerId}/business/{businessId}', 'Apis\v1\ConsumerController@fetchSingle');
-      $router->put('/{consumerId}/business/{businessId}', 'Apis\v1\ConsumerController@update');
-      $router->post('/', 'Apis\v1\ConsumerController@store');
+      $router->get('/', 'Apis\v1\WalletController@fetch');
+      $router->get('/{walletId}', 'Apis\v1\WalletController@fetchSingle');
+      $router->get('/user/{userId}', 'Apis\v1\WalletController@fetchUserWallet');
+      $router->put('/{WalletId}', 'Apis\v1\WalletController@update');
+      $router->post('/', 'Apis\v1\WalletController@store');
+       /* Update  Wallet balance */
+       $router->post('/balance', 'Apis\v1\WalletController@updateBalance');
     });
   });
   /* Version 1 */

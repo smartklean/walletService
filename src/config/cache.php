@@ -17,7 +17,7 @@ return [
     |
     */
 
-    'default' => env('CONSUMERWS_CACHE_DRIVER', 'file'),
+    'default' => env('WALLETWS_CACHE_DRIVER', 'file'),
 
     /*
     |--------------------------------------------------------------------------

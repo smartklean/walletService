@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('CONSUMERWS_QUEUE_CONNECTION', 'sync'),
+    'default' => env('WALLETWS_QUEUE_CONNECTION', 'sync'),
 
     /*
     |--------------------------------------------------------------------------
